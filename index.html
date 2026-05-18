@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toko Adilganteng</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#e0e0e0;
+    overflow:hidden;
+}
+
+/* RGB TEXT */
+.rgb-text{
+    background:linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    lime,
+    cyan,
+    blue,
+    violet,
+    red
+    );
+    background-size:400%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:rgbText 6s linear infinite;
+    font-weight:bold;
+}
+
+@keyframes rgbText{
+    0%{background-position:0%;}
+    100%{background-position:400%;}
+}
+
+/* WELCOME */
+#welcome{
+    position:fixed;
+    width:100%;
+    height:100vh;
+    background:linear-gradient(135deg,black,gray);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    color:white;
+    z-index:100;
+    transition:1.5s;
+}
+
+.creator-text{
+    position:absolute;
+    top:20px;
+    right:20px;
+    text-align:right;
+    font-weight:bold;
+    line-height:1.5;
+}
+
+#welcome img{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:20px;
+    border:5px solid transparent;
+    animation:rgbBorder 3s linear infinite;
+    box-shadow:0 0 25px cyan;
+}
+
+@keyframes rgbBorder{
+    0%{box-shadow:0 0 20px red;}
+    25%{box-shadow:0 0 20px lime;}
+    50%{box-shadow:0 0 20px cyan;}
+    75%{box-shadow:0 0 20px violet;}
+    100%{box-shadow:0 0 20px red;}
+}
+
+#welcome h1{
+    font-size:45px;
+    text-align:center;
+    margin-bottom:25px;
+    animation:naikTurun 2s infinite;
+}
+
+@keyframes naikTurun{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+    100%{transform:translateY(0);}
+}
+
+#welcome button{
+    padding:14px 30px;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* MAIN */
+#main{
+    display:none;
+    opacity:0;
+    transform:translateY(50px);
+    transition:1.5s;
+    padding:20px;
+    text-align:center;
+}
+
+#main.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+h2{
+    margin-bottom:25px;
+    font-size:35px;
+}
+
+/* CARD */
+.container{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:25px;
+}
+
+.card{
+    width:230px;
+    height:360px;
+    perspective:1000px;
+}
+
+.card-inner{
+    width:100%;
+    height:100%;
+    position:relative;
+    transition:transform 0.8s;
+    transform-style:preserve-3d;
+}
+
+.card.active .card-inner{
+    transform:rotateY(180deg);
+}
+
+.card-front,
+.card-back{
+    position:absolute;
+    width:100%;
+    height:100%;
+    backface-visibility:hidden;
+    border-radius:18px;
+    overflow:hidden;
+    background:white;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.card-front img{
+    width:100%;
+    height:170px;
+    object-fit:cover;
+}
+
+.card-front h3{
+    margin:12px 0;
+}
+
+.card-front p{
+    padding:0 10px;
+    color:#666;
+}
+
+.card-back{
+    transform:rotateY(180deg);
+    padding:20px;
+    text-align:left;
+}
+
+.card-back h3{
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.spec{
+    font-size:14px;
+    line-height:1.7;
+    color:#333;
+}
+
+/* RGB BUY BUTTON */
+.buy-btn{
+    margin-top:15px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    lime,
+    cyan,
+    blue,
+    violet,
+    red
+    );
+    background-size:400%;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    animation:rgbButton 5s linear infinite;
+    box-shadow:0 0 15px rgba(255,255,255,0.5);
+}
+
+@keyframes rgbButton{
+    0%{background-position:0%;}
+    100%{background-position:400%;}
+}
+
+.info-btn{
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:#444;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* POPUP */
+.popup{
+    display:none;
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    left:0;
+    top:0;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.popup-content{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    width:320px;
+    position:relative;
+    box-shadow:0 0 20px cyan;
+}
+
+.popup-content button{
+    margin:8px;
+    padding:10px 18px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    lime,
+    cyan,
+    blue,
+    violet,
+    red
+    );
+    background-size:400%;
+    animation:rgbButton 5s linear infinite;
+    color:white;
+    font-weight:bold;
+}
+
+.qris-img{
+    width:180px;
+    margin-top:15px;
+}
+
+.close{
+    position:absolute;
+    top:10px;
+    right:15px;
+    font-size:28px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- WELCOME -->
+<div id="welcome">
+
+<div class="creator-text">
+
+<span class="rgb-text">web by:</span><br>
+
+<span class="rgb-text">adil putra</span><br>
+
+<span class="rgb-text">aji Rafa</span><br>
+
+<span class="rgb-text">bayu aji</span><br>
+
+<span class="rgb-text">medi putro</span>
+
+</div>
+
+<img src="https://img.sanishtech.com/u/a99811ad0d10dd669294f57694196f53.jpg">
+
+<h1 class="rgb-text">
+Selamat Datang<br>
+di Toko Adilganteng 🏍️
+</h1>
+
+<button onclick="masukWeb()">Masuk Toko</button>
+
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+<h2 class="rgb-text">🏍️ Jual Motor 🏍️</h2>
+
+<div class="container">
+
+<!-- CARD 1 -->
+<div class="card">
+<div class="card-inner">
+
+<div class="card-front">
+<img src="https://img.sanishtech.com/u/f9eb766bc40d93ec5667f1b2f3e7f817.jpg">
+
+<h3 class="rgb-text">Motor Parkiran</h3>
+
+<p>Trio ganteng 😎🔥</p>
+
+<button class="info-btn" onclick="flipCard(this)">
+Lihat Spesifikasi
+</button>
+</div>
+
+<div class="card-back">
+
+<h3 class="rgb-text">Motor Parkiran</h3>
+
+<div class="spec">
+⚙️ Mesin 150cc semi turbo<br>
+⛽ Pertalite / Pertamax<br>
+🚀 Top speed 120 km/jam<br>
+💡 Lampu LED RGB<br>
+🛠️ Bekas parkiran mall elit
+</div>
+
+<button class="buy-btn" onclick="bukaBayar()">
+Rp15.000
+</button>
+
+</div>
+</div>
+</div>
+
+<!-- CARD 2 -->
+<div class="card">
+<div class="card-inner">
+
+<div class="card-front">
+<img src="https://img.sanishtech.com/u/580f872846e24d7aa4091298a28777c4.jpg">
+
+<h3 class="rgb-text">Harley Bayu</h3>
+
+<p>Harley bekas Bayu 🏍️</p>
+
+<button class="info-btn" onclick="flipCard(this)">
+Lihat Spesifikasi
+</button>
+</div>
+
+<div class="card-back">
+
+<h3 class="rgb-text">Harley Bayu</h3>
+
+<div class="spec">
+🔥 Mesin V-Twin 2000cc<br>
+🔊 Suara bass gahar<br>
+💡 Full LED premium<br>
+🛞 Ban gede anti slip<br>
+🇺🇸 Style Amerika
+</div>
+
+<button class="buy-btn" onclick="bukaBayar()">
+Rp13.000
+</button>
+
+</div>
+</div>
+</div>
+
+<!-- CARD 3 -->
+<div class="card">
+<div class="card-inner">
+
+<div class="card-front">
+<img src="https://img.sanishtech.com/u/9dc396440841fc2082759d4fbd037187.jpg">
+
+<h3 class="rgb-text">Adil Kopling</h3>
+
+<p>Masih bisa jalan 😹</p>
+
+<button class="info-btn" onclick="flipCard(this)">
+Lihat Spesifikasi
+</button>
+</div>
+
+<div class="card-back">
+
+<h3 class="rgb-text">Adil Kopling</h3>
+
+<div class="spec">
+⚙️ Mesin 125cc kopling<br>
+💨 Tarikan masih galak<br>
+🛠️ Rem agak error<br>
+⛽ Irit bensin<br>
+😹 Cocok buat freestyle
+</div>
+
+<button class="buy-btn" onclick="bukaBayar()">
+Rp16.000
+</button>
+
+</div>
+</div>
+</div>
+
+<!-- CARD 4 -->
+<div class="card">
+<div class="card-inner">
+
+<div class="card-front">
+<img src="https://img.sanishtech.com/u/15d41a37cf8b8ebf962918d512374d91.jpg">
+
+<h3 class="rgb-text">Motor Misterius</h3>
+
+<p>Lupa ini motor apa 🗿</p>
+
+<button class="info-btn" onclick="flipCard(this)">
+Lihat Spesifikasi
+</button>
+</div>
+
+<div class="card-back">
+
+<h3 class="rgb-text">Motor Misterius</h3>
+
+<div class="spec">
+❓ Mesin misterius<br>
+🚀 Kadang kenceng kadang mati<br>
+🛠️ Prototype gagal<br>
+💡 Lampu random nyala sendiri<br>
+👻 Aura horor
+</div>
+
+<button class="buy-btn" onclick="bukaBayar()">
+Rp12.000
+</button>
+
+</div>
+</div>
+</div>
+
+<!-- CARD 5 -->
+<div class="card">
+<div class="card-inner">
+
+<div class="card-front">
+<img src="https://img.sanishtech.com/u/6568007a950f6a231cb416a33f3f2201.jpg">
+
+<h3 class="rgb-text">Adil & Bayu</h3>
+
+<p>Duo ganteng paling brutal 😎🔥</p>
+
+<button class="info-btn" onclick="flipCard(this)">
+Lihat Spesifikasi
+</button>
+</div>
+
+<div class="card-back">
+
+<h3 class="rgb-text">Adil & Bayu</h3>
+
+<div class="spec">
+⚡ Friendship Power Max<br>
+😎 Aura ganteng +999<br>
+🔥 Mode brutal aktif<br>
+🚀 Auto kenceng kalau bareng<br>
+☕ Bahan bakar kopi
+</div>
+
+<button class="buy-btn" onclick="bukaBayar()">
+Rp45.000
+</button>
+
+</div>
+</div>
+</div>
+
+<!-- CARD 6 -->
+<div class="card">
+<div class="card-inner">
+
+<div class="card-front">
+<img src="https://img.sanishtech.com/u/2d662b13d40564e76da31492851c2f6f.jpg">
+
+<h3 class="rgb-text">Harley Adil</h3>
+
+<p>Harley import langsung dari Amerika 🇺🇸🔥</p>
+
+<button class="info-btn" onclick="flipCard(this)">
+Lihat Spesifikasi
+</button>
+</div>
+
+<div class="card-back">
+
+<h3 class="rgb-text">Harley Adil</h3>
+
+<div class="spec">
+🔥 Mesin 1800cc USA Edition<br>
+🚀 Top speed 200 km/jam<br>
+💡 Full RGB LED<br>
+🛞 Ban premium Harley<br>
+🇺🇸 Import langsung Amerika
+</div>
+
+<button class="buy-btn" onclick="bukaBayar()">
+Rp45.000
+</button>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- POPUP -->
+<div id="popupBayar" class="popup">
+
+<div class="popup-content">
+
+<div class="close" onclick="tutupPopup()">×</div>
+
+<h2 class="rgb-text">Bayar Sekarang 💸</h2>
+
+<button onclick="pilihBayar('DANA')">DANA</button>
+<button onclick="pilihBayar('GOPAY')">GOPAY</button>
+<button onclick="pilihBayar('OVO')">OVO</button>
+<button onclick="pilihBayar('QRIS')">QRIS</button>
+
+<div id="bayarBox"></div>
+
+</div>
+
+</div>
+
+<!-- AUDIO -->
+<audio id="bgMusic" loop>
+<source src="https://www.image2url.com/r2/default/audio/1778759222931-e5b62562-fdfe-41f5-b06f-5826470e4b53.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+function masukWeb(){
+
+document.getElementById("bgMusic").play();
+
+document.getElementById("welcome").style.opacity="0";
+
+setTimeout(()=>{
+
+document.getElementById("welcome").style.display="none";
+
+document.getElementById("main").style.display="block";
+
+setTimeout(()=>{
+document.getElementById("main").classList.add("show");
+},100);
+
+document.body.style.overflow="auto";
+
+},1500);
+
+}
+
+function flipCard(button){
+
+let card = button.closest(".card");
+
+card.classList.toggle("active");
+
+}
+
+function bukaBayar(){
+
+document.getElementById("popupBayar").style.display="flex";
+
+}
+
+function tutupPopup(){
+
+document.getElementById("popupBayar").style.display="none";
+
+document.getElementById("bayarBox").innerHTML="";
+
+}
+
+function pilihBayar(metode){
+
+document.getElementById("bayarBox").innerHTML=`
+
+<h3 class="rgb-text">${metode}</h3>
+
+<img class="qris-img" src="https://img.sanishtech.com/u/acf85bb7faf9bb64347ec3775042f035.jpg">
+
+<p>Pembayaran ditunggu ⏳</p>
+
+<button onclick="konfirmasiBayar()">Saya Sudah Bayar</button>
+
+`;
+
+}
+
+function konfirmasiBayar(){
+
+document.getElementById("bayarBox").innerHTML=`
+
+<h1>✅</h1>
+
+<h2 class="rgb-text">Pembayaran Berhasil</h2>
+
+<p>Terima kasih sudah membeli 😎🔥</p>
+
+`;
+
+}
+
+</script>
+
+</body>
+</html>
